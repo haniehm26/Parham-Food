@@ -10,5 +10,5 @@ class AllRestaurantsApi(Resource):
         for r in restaurants.find():
             output.append({'name':r['name'],'area': r['area'], 'address' : r['address'], 
                             'service_areas' : r['service_areas'], 'work_hour' : r['work_hour'],
-                            'deliver_cost' : r['deliver_cost'], 'menu':r['menu']})
+                            'deliver_cost' : r['deliver_cost'], 'foods':r['foods']})
         return jsonify({'restaurants': output})

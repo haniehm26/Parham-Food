@@ -10,7 +10,7 @@ def initialize_routes(api):
     api.add_resource(RegisterRestaurantApi, '/restaurant')  # post
     api.add_resource(AllRestaurantsApi, '/restaurant')  # get
     api.add_resource(EditRestaurantApi, '/restaurant')  # put
-    # api.add_resource(AddFoodItemApi, '/restaurant/foods')  # post
+    api.add_resource(AddFoodItemApi, '/restaurant/foods')  # post
     # api.add_resource(, '/restaurant/<id>/foods/<id>')  # delete
     # api.add_resource(, '/restaurant/<id>/foods/<id>')  # put
     # api.add_resource(, '/orders/<id>')  # put

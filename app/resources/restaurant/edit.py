@@ -40,7 +40,8 @@ class EditRestaurantApi(Resource):
             else:
                 raise UnauthorizedError
             return jsonify({'name':updated_restaurant['name'],'area':updated_restaurant['area'], 'address' :updated_restaurant['address'], 
-                            'service_areas' :updated_restaurant['service_areas'], 'work_hour' :updated_restaurant['work_hour'], 'deliver_cost' :updated_restaurant['deliver_cost']})
+                            'service_areas' :updated_restaurant['service_areas'], 'work_hour' :updated_restaurant['work_hour'],
+                            'deliver_cost' :updated_restaurant['deliver_cost'], 'foods':updated_restaurant['foods']})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError

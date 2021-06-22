@@ -22,15 +22,16 @@ class AddFoodItemApi(Resource):
                     body = request.get_json()
                     name = body['name']
                     cost = body['cost']
+                    orderable = False
                     id = found_restaurant['_id']
-                    menu = {'name': name, 'cost': cost}
-                    food_id = foods.insert(menu)
+                    food_id = foods.insert({'name': name, 'cost': cost , 'orderable' : orderable})
                     new_food = foods.find_one({'_id': food_id})
-                    print(found_restaurant['menu'],"+++++++++++++++++++++++++++++++++")
-                    updated_menu = found_restaurant['menu'].append(menu)
-                    print(updated_menu,"+++++++++++++++++++++++++++++++++")
+                    updated_food = []
+                    for f in found_restaurant['foods']:
+                        updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : orderable})
+                    updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable})
                     restaurants.update({'id': current_manager_id},
-                                 {"$set":{'menu': updated_menu}})
+                                 {"$set":{'foods': updated_food}})
                 else:
                     raise UnauthorizedError
             else:

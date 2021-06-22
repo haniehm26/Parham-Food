@@ -24,10 +24,10 @@ class RegisterRestaurantApi(Resource):
                 work_hour = body['work_hour']
                 deliver_cost = body['deliver_cost']
                 id = current_manager_id
-                menu = []
+                foods = []
                 restaurant_id = restaurants.insert({'name': name, 'area': area, 'address' : address,
                                                     'service_areas' : service_areas, 'work_hour' : work_hour,
-                                                    'deliver_cost' : deliver_cost, 'id' : id, 'menu' : menu})
+                                                    'deliver_cost' : deliver_cost, 'id' : id, 'foods' : foods})
                 new_restaurant = restaurants.find_one({'_id': restaurant_id})
             else:
                 raise UnauthorizedError
