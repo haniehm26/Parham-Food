@@ -26,8 +26,7 @@ class EditRestaurant(Resource):
                     service_areas = found_restaurant['service_areas'] if body['service_areas'] == "" else body['service_areas']
                     work_hour = found_restaurant['work_hour'] if body['work_hour'] == "" else body['work_hour']
                     deliver_cost = found_restaurant['deliver_cost'] if body['deliver_cost'] == "" else body['deliver_cost']
-
-                    restaurant_id = restaurants.update({'_id': found_restaurant},
+                    restaurant_id = restaurants.update({'id': current_manager_id},
                                  {"$set": 
                                  {'name': name,
                                   'area': area,
@@ -35,12 +34,13 @@ class EditRestaurant(Resource):
                                   'service_areas': service_areas,
                                   'work_hour': work_hour,
                                   'deliver_cost': deliver_cost}})
-                    new_restaurant = restaurants.find_one({'_id': restaurant_id})
+
+                    updated_restaurant = restaurants.find_one({'id': current_manager_id})
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify(str(new_restaurant))
+            return jsonify(str(updated_restaurant))
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError

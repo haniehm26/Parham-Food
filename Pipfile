@@ -10,6 +10,7 @@ flask-restful = "*"
 flask-pymongo = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
+flask-cors = "*"
 
 [dev-packages]
 
