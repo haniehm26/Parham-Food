@@ -7,39 +7,39 @@ from database.db import mongo
 from database.hashing import hash_password, check_password
 from resources.errors import EmailAlreadyExistsError, SchemaValidationError, UserNotExistsError, UnauthorizedError
 
-class ManagerSignupApi(Resource):
+class CustomerSignupApi(Resource):
     def post(self):
         try:
-            managers = mongo.db.managers
+            customers = mongo.db.customers
             body = request.get_json()
-            manager_found = managers.find_one({'email': body['email']})
-            if manager_found:
+            customer_found = customers.find_one({'phone': body['phone']})
+            if customer_found:
                 raise EmailAlreadyExistsError
             else:
                 password = hash_password(body['password'])
-                manager_id = managers.insert({'email': body['email'], 'password': password})
-                new_manager = managers.find_one({'_id': manager_id})
+                customer_id = customers.insert({'phone': body['phone'], 'password': password})
+                new_customer = customers.find_one({'_id': customer_id})
                 expires = datetime.timedelta(days=7)
-                access_token = create_access_token(identity=str(manager_id), expires_delta=expires)
+                access_token = create_access_token(identity=str(customer_id), expires_delta=expires)
             return {'token': access_token}, 200
 
         except CollectionInvalid:
             raise SchemaValidationError
 
-class ManagerLoginApi(Resource):
+class CustomerLoginApi(Resource):
     def post(self):
         try:
-            managers = mongo.db.managers
+            customers = mongo.db.customers
             body = request.get_json()
-            manager_found = managers.find_one({'email': body['email']})
-            if not manager_found:
+            customer_found = customers.find_one({'phone': body['phone']})
+            if not customer_found:
                 raise UserNotExistsError
             else:
-                authorized = check_password(manager_found['password'], body['password'])
+                authorized = check_password(customer_found['password'], body['password'])
                 if not authorized:
                     raise UnauthorizedError
                 expires = datetime.timedelta(days=7)
-                access_token = create_access_token(identity=str(manager_found['_id']), expires_delta=expires)
+                access_token = create_access_token(identity=str(customer_found['_id']), expires_delta=expires)
             return {'token': access_token}, 200
 
         except CollectionInvalid:
