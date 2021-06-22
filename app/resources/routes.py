@@ -12,7 +12,7 @@ def initialize_routes(api):
     api.add_resource(AllRestaurantsApi, '/restaurant')  # get
     api.add_resource(EditRestaurantApi, '/restaurant/<id>')  # put
     api.add_resource(AddFoodItemApi, '/restaurant/<id>/foods')  # post
-    api.add_resource(RemoveFoodItemApi, '/restaurant/foods/<id>')  # delete
+    api.add_resource(RemoveFoodItemApi, '/restaurant/<r_id>/foods/<f_id>')  # delete
     # api.add_resource(, '/restaurant/foods/<id>')  # put
     # api.add_resource(, '/orders/<id>')  # put
     # api.add_resource(, '/restaurant/<id>/foods/<id>/comments/<id>')  # put
