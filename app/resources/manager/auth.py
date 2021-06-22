@@ -5,7 +5,6 @@ from pymongo.errors import CollectionInvalid
 import datetime
 from database.db import mongo
 from database.hashing import hash_password
-# from database.models import Manager
 from resources.errors import EmailAlreadyExistsError, SchemaValidationError
 
 class SignupApi(Resource):
@@ -21,14 +20,8 @@ class SignupApi(Resource):
                 manager_id = managers.insert({'email': body['email'], 'password': password})
                 new_manager = managers.find_one({'_id': manager_id})
                 expires = datetime.timedelta(days=7)
-                access_token = create_access_token(identity=str(new_manager), expires_delta=expires)
-            return jsonify({'token': access_token})
+                access_token = create_access_token(identity=str(manager_id), expires_delta=expires)
+            return {'token': access_token}, 200
 
         except CollectionInvalid:
             raise SchemaValidationError
-
-# class Alaki(Resource):
-#     def get(self):
-#         Manager({'email':'test@mail.com', 'password':'123456789'}).save()
-#         m = Manager.objects.to_json()
-#         return Response(m, mimetype="application/json", status=200)
