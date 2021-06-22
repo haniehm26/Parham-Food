@@ -1,11 +1,13 @@
 from resources.manager.auth import SignupApi
 from resources.restaurant.register import RegisterRestaurantApi
 from resources.restaurant.edit import EditRestaurantApi
+from resources.restaurant.get_all import AllRestaurantsApi
 from resources.food.add_item import AddFoodItemApi
 
 def initialize_routes(api):
     api.add_resource(SignupApi, '/manager/login')  # post
     api.add_resource(RegisterRestaurantApi, '/restaurant')  # post
+    api.add_resource(AllRestaurantsApi, '/restaurant')  # get
     api.add_resource(EditRestaurantApi, '/restaurant')  # put
     api.add_resource(AddFoodItemApi, '/restaurant/foods')  # post
     # api.add_resource(, '/restaurant/<id>/foods/<id>')  # delete

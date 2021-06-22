@@ -19,7 +19,6 @@ class EditRestaurantApi(Resource):
                 found_restaurant = restaurants.find_one({"id":current_manager_id})
                 if found_restaurant :
                     body = request.get_json()
-
                     name =  found_restaurant['name'] if body['name'] == "" else body['name']
                     area = found_restaurant['area'] if body['area'] == "" else body['area']
                     address = found_restaurant['address'] if body['address'] == "" else body['address']

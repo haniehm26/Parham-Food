@@ -26,7 +26,9 @@ class AddFoodItemApi(Resource):
                     menu = {'name': name, 'cost': cost}
                     food_id = foods.insert(menu)
                     new_food = foods.find_one({'_id': food_id})
+                    print(found_restaurant['menu'],"+++++++++++++++++++++++++++++++++")
                     updated_menu = found_restaurant['menu'].append(menu)
+                    print(updated_menu,"+++++++++++++++++++++++++++++++++")
                     restaurants.update({'id': current_manager_id},
                                  {"$set":{'menu': updated_menu}})
                 else:
