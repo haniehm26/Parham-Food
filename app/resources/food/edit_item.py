@@ -9,34 +9,43 @@ from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValida
 
 class EditFoodItemApi(Resource):
     @jwt_required()
-    def delete(self, r_id, f_id):
+    def put(self, id):
         try:
             current_manager_id = get_jwt_identity()
             managers = mongo.db.managers
             found_manager = managers.find_one({"_id": ObjectId(current_manager_id)})
             if found_manager:
+                foods = mongo.db.foods
                 restaurants = mongo.db.restaurants
-                found_restaurant = restaurants.find_one({"_id":ObjectId(r_id)})
+                found_food = foods.find_one({"_id":ObjectId(id)})
+                found_restaurant = restaurants.find_one({"_id":ObjectId(found_food['restaurant_id'])})
                 if found_restaurant :
-                    foods = mongo.db.foods
-                    foods.delete_one({'_id': ObjectId(f_id)})
+                    body = request.get_json()
+                    name = found_food['name'] if body['name'] == "" else body['name']
+                    cost = found_food['cost'] if body['cost'] == "" else body['cost']
+                    orderable = found_food['orderable'] if body['orderable'] == "" else body['orderable']
+
+                    food_id = foods.update({'_id': ObjectId(id)},
+                                 {"$set": 
+                                 {'name': name,
+                                  'cost': cost,
+                                  'orderable': orderable }})
 
                     updated_food = []
                     for f in found_restaurant['foods']:
-                        if f['food_id'] == f_id:
-                            found_restaurant['foods'].remove({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f_id})
+                        if f['food_id'] == id:
+                            updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'food_id': id})
                         else:
                             updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id']})
-                    restaurants.update({'_id': ObjectId(r_id)},
+                    restaurants.update({'_id': ObjectId(ObjectId(found_food['restaurant_id']))},
                                  {"$set":{'foods': updated_food}})
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': f_id, 'restaurant_id': r_id})
+            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':name, 'cost':cost, 'orderable':orderable})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
         except CursorNotFound:
             raise UserNotExistsError
-
