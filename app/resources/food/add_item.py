@@ -9,14 +9,14 @@ from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValida
 
 class AddFoodItemApi(Resource):
     @jwt_required()
-    def post(self):
+    def post(self, id):
         try:
             current_manager_id = get_jwt_identity()
             managers = mongo.db.managers
             found_manager = managers.find_one({"_id": ObjectId(current_manager_id)})
             if found_manager:
                 restaurants = mongo.db.restaurants
-                found_restaurant = restaurants.find_one({"id":current_manager_id})
+                found_restaurant = restaurants.find_one({"_id":ObjectId(id)})
                 if found_restaurant :
                     foods = mongo.db.foods
                     body = request.get_json()
@@ -24,8 +24,7 @@ class AddFoodItemApi(Resource):
                     cost = body['cost']
                     orderable = False
                     
-                    id = found_restaurant['_id']
-                    food_id = foods.insert({'name': name, 'cost': cost , 'orderable' : orderable})
+                    food_id = foods.insert({'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id})
                     new_food = foods.find_one({'_id': food_id})
 
                     updated_food = []
@@ -33,13 +32,13 @@ class AddFoodItemApi(Resource):
                         updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : orderable})
                     updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable})
 
-                    restaurants.update({'id': current_manager_id},
+                    restaurants.update({'_id': ObjectId(id)},
                                  {"$set":{'foods': updated_food}})
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': str(food_id),'name': name, 'cost': cost , 'orderable' : orderable})
+            return jsonify({'id': str(food_id),'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
