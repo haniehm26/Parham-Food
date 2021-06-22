@@ -7,7 +7,7 @@ from pymongo.errors import CollectionInvalid, CursorNotFound, ConfigurationError
 from database.db import mongo
 from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValidationError
 
-class EditRestaurant(Resource):
+class EditRestaurantApi(Resource):
     @jwt_required()
     def put(self):
         try:
@@ -33,7 +33,7 @@ class EditRestaurant(Resource):
                                   'address': address,
                                   'service_areas': service_areas,
                                   'work_hour': work_hour,
-                                  'deliver_cost': deliver_cost}})
+                                  'deliver_cost': deliver_cost }})
 
                     updated_restaurant = restaurants.find_one({'id': current_manager_id})
                 else:

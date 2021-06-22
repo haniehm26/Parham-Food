@@ -7,7 +7,7 @@ from pymongo.errors import CollectionInvalid, CursorNotFound, ConfigurationError
 from database.db import mongo
 from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValidationError
 
-class RegisterRestaurant(Resource):
+class RegisterRestaurantApi(Resource):
     @jwt_required()
     def post(self):
         try:
@@ -24,13 +24,15 @@ class RegisterRestaurant(Resource):
                 work_hour = body['work_hour']
                 deliver_cost = body['deliver_cost']
                 id = current_manager_id
+                menu = []
                 restaurant_id = restaurants.insert({'name': name, 'area': area, 'address' : address,
                                                     'service_areas' : service_areas, 'work_hour' : work_hour,
-                                                    'deliver_cost' : deliver_cost, 'id' : id})
+                                                    'deliver_cost' : deliver_cost, 'id' : id, 'menu' : menu})
                 new_restaurant = restaurants.find_one({'_id': restaurant_id})
             else:
                 raise UnauthorizedError
-            return jsonify(str(new_restaurant))
+            return jsonify({'name':name,'area': area, 'address' : address, 
+                            'service_areas' : service_areas, 'work_hour' : work_hour, 'deliver_cost' : deliver_cost })
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
