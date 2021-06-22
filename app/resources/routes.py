@@ -3,16 +3,17 @@ from resources.restaurant.register import RegisterRestaurantApi
 from resources.restaurant.edit import EditRestaurantApi
 from resources.restaurant.get_all import AllRestaurantsApi
 from resources.food.add_item import AddFoodItemApi
+from resources.food.remove_item import RemoveFoodItemApi
 
 def initialize_routes(api):
     api.add_resource(SignupApi, '/manager/signup')  # post
     api.add_resource(LoginApi, '/manager/login')  # post
     api.add_resource(RegisterRestaurantApi, '/restaurant')  # post
     api.add_resource(AllRestaurantsApi, '/restaurant')  # get
-    api.add_resource(EditRestaurantApi, '/restaurant')  # put
-    api.add_resource(AddFoodItemApi, '/restaurant/foods')  # post
-    # api.add_resource(, '/restaurant/<id>/foods/<id>')  # delete
-    # api.add_resource(, '/restaurant/<id>/foods/<id>')  # put
+    api.add_resource(EditRestaurantApi, '/restaurant/<id>')  # put
+    api.add_resource(AddFoodItemApi, '/restaurant/<id>/foods')  # post
+    api.add_resource(RemoveFoodItemApi, '/restaurant/foods/<id>')  # delete
+    # api.add_resource(, '/restaurant/foods/<id>')  # put
     # api.add_resource(, '/orders/<id>')  # put
     # api.add_resource(, '/restaurant/<id>/foods/<id>/comments/<id>')  # put
 

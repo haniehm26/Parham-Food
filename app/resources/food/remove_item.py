@@ -7,9 +7,9 @@ from pymongo.errors import CollectionInvalid, CursorNotFound, ConfigurationError
 from database.db import mongo
 from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValidationError
 
-class AddFoodItemApi(Resource):
+class RemoveFoodItemApi(Resource):
     @jwt_required()
-    def post(self):
+    def delete(self, id):
         try:
             current_manager_id = get_jwt_identity()
             managers = mongo.db.managers

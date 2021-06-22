@@ -23,15 +23,14 @@ class RegisterRestaurantApi(Resource):
                 service_areas = body['service_areas']
                 work_hour = body['work_hour']
                 deliver_cost = body['deliver_cost']
-                id = current_manager_id
                 foods = []
                 restaurant_id = restaurants.insert({'name': name, 'area': area, 'address' : address,
                                                     'service_areas' : service_areas, 'work_hour' : work_hour,
-                                                    'deliver_cost' : deliver_cost, 'id' : id, 'foods' : foods})
+                                                    'deliver_cost' : deliver_cost, 'foods' : foods})
                 new_restaurant = restaurants.find_one({'_id': restaurant_id})
             else:
                 raise UnauthorizedError
-            return jsonify({'name':name,'area': area, 'address' : address, 
+            return jsonify({'name':name,'area': area, 'address' : address, 'id': str(restaurant_id), 
                             'service_areas' : service_areas, 'work_hour' : work_hour, 'deliver_cost' : deliver_cost })
 
         except CollectionInvalid or ConfigurationError:
