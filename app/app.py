@@ -2,10 +2,15 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
+from flask_cors import CORS
 from resources.errors import errors
 from database.db import initialize_db
 
 app = Flask(__name__)
+
+# for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
+# (Use this when calling APIs from front-end browser)
+CORS(app)
 
 # Windows: Type in this command in 'cmd', before running the project
 # $ set ENV_FILE_LOCATION=./.env

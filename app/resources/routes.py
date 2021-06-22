@@ -1,11 +1,11 @@
 from resources.manager.auth import SignupApi
-# from resources.manager.auth import Alaki
 from resources.restaurant.register import RegisterRestaurant
+from resources.restaurant.edit import EditRestaurant
 
 def initialize_routes(api):
     api.add_resource(SignupApi, '/manager/login')  # post
     api.add_resource(RegisterRestaurant, '/restaurant')  # post
-    # api.add_resource(, '/restaurant/<id>')  # put
+    api.add_resource(EditRestaurant, '/restaurant')  # put
     # api.add_resource(, '/restaurant/<id>/foods')  # post
     # api.add_resource(, '/restaurant/<id>/foods/<id>')  # delete
     # api.add_resource(, '/restaurant/<id>/foods/<id>')  # put
