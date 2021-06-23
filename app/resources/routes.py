@@ -1,6 +1,7 @@
 from resources.manager.auth import ManagerSignupApi, ManagerLoginApi
 from resources.customer.auth import CustomerSignupApi, CustomerLoginApi
 from resources.customer.profile import EditProfileApi
+from resources.customer.search import SearchApi
 from resources.restaurant.register import RegisterRestaurantApi
 from resources.restaurant.edit import EditRestaurantApi
 from resources.restaurant.get_all import AllRestaurantsApi
@@ -23,9 +24,7 @@ def initialize_routes(api):
     api.add_resource(CustomerSignupApi, '/user/signup')  # post
     api.add_resource(CustomerLoginApi, '/user/login')  # post
     api.add_resource(EditProfileApi, '/user/profile')  # put
-    # api.add_resource(, '/search/food')  # get
-    # api.add_resource(, '/search/restaurant')  # get
-    # api.add_resource(, '/search/area')  # get
+    api.add_resource(SearchApi, '/search/<tag>')  # get tag={food, restaurant, area}
     # api.add_resource(, '/orders')  # post
     # api.add_resource(, '/orders/<id>/status')  # get
     # api.add_resource(, '/restaurant/<id>/foods/<id>/comments')  # post
