@@ -25,7 +25,7 @@ def initialize_routes(api):
     api.add_resource(CustomerLoginApi, '/user/login')  # post
     api.add_resource(GetProfileApi, '/user/profile')  # get
     api.add_resource(EditProfileApi, '/user/profile')  # put
-    api.add_resource(SearchApi, '/search/<tag>')  # get tag={food, restaurant, area}
+    api.add_resource(SearchApi, '/search')  # get tag={food, restaurant, area}
     # api.add_resource(, '/orders')  # post
     # api.add_resource(, '/orders/<id>/status')  # get
     # api.add_resource(, '/restaurant/<id>/foods/<id>/comments')  # post
