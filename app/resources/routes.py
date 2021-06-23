@@ -1,6 +1,6 @@
 from resources.manager.auth import ManagerSignupApi, ManagerLoginApi
 from resources.customer.auth import CustomerSignupApi, CustomerLoginApi
-from resources.customer.profile import EditProfileApi
+from resources.customer.profile import EditProfileApi, GetProfileApi
 from resources.customer.search import SearchApi
 from resources.restaurant.register import RegisterRestaurantApi
 from resources.restaurant.edit import EditRestaurantApi
@@ -23,6 +23,7 @@ def initialize_routes(api):
 
     api.add_resource(CustomerSignupApi, '/user/signup')  # post
     api.add_resource(CustomerLoginApi, '/user/login')  # post
+    api.add_resource(GetProfileApi, '/user/profile')  # get
     api.add_resource(EditProfileApi, '/user/profile')  # put
     api.add_resource(SearchApi, '/search/<tag>')  # get tag={food, restaurant, area}
     # api.add_resource(, '/orders')  # post

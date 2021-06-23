@@ -1,0 +1,48 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Manager",
+    "type": "object",
+    "properties": {
+        "email": {
+            "type": "string",
+            "uniqueItems": true 
+        },
+        "password": {
+            "type": "string",
+            "minimum": 8
+        }
+    },
+    "required": ["email", "password"]
+},
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Customer",
+    "type": "object",
+    "properties": {
+        "phone": {
+            "type": "number",
+            "uniqueItems": true 
+        },
+        "password": {
+            "type": "string",
+            "minimum": 8
+        }
+    },
+    "required": ["phone", "password"]
+},
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Customer",
+    "type": "object",
+    "properties": {
+        "phone": {
+            "type": "number",
+            "uniqueItems": true 
+        },
+        "password": {
+            "type": "string",
+            "minimum": 8
+        }
+    },
+    "required": ["phone", "password"]
+}

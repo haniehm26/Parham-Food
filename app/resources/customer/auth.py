@@ -17,7 +17,23 @@ class CustomerSignupApi(Resource):
                 raise EmailAlreadyExistsError
             else:
                 password = hash_password(body['password'])
-                customer_id = customers.insert({'phone': body['phone'], 'password': password})
+                first_name = ""
+                last_name = ""
+                area = ""
+                address = ""
+                credit = 1000000
+                orders_history = []
+                favorits = []
+                customer_id = customers.insert({
+                    'phone': body['phone'],
+                    'password': password,
+                    'first_name': first_name, 
+                    'last_name':last_name, 
+                    'area': area, 
+                    'address' : address,
+                    'credit' : credit,
+                    'orders_history' : orders_history,
+                    'favorits' : favorits})
                 new_customer = customers.find_one({'_id': customer_id})
                 expires = datetime.timedelta(days=7)
                 access_token = create_access_token(identity=str(customer_id), expires_delta=expires)
