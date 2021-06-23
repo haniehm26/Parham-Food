@@ -34,7 +34,7 @@ class RemoveFoodItemApi(Resource):
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':found_food['name'], 'cost':found_food['cost']})
+            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':found_food['name'], 'cost':found_food['cost'], 'orderable':found_food['orderable']})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
