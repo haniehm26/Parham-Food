@@ -1,48 +1,404 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Manager",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
     "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "manager": {
+                "email": "manager@one.com",
+                "password": "12345678"
+            },
+            "customer": {
+                "phone": "09121234567",
+                "password": "12345678",
+                "first_name": "Hanieh",
+                "last_name": "Mahdavi",
+                "area": "HaniehArea",
+                "address": "HaniehAddress",
+                "credit": 0,
+                "orders_history": [],
+                "favorits": []
+            },
+            "restaurant": {
+                "name": "Hani",
+                "area": "HaniArea",
+                "address": "HaniAddress",
+                "service_areas": "HaniehArea, HaniArea",
+                "work_hour": "9-9",
+                "deliver_cost": 0,
+                "foods": []
+            },
+            "food": {
+                "name": "Adasi",
+                "cost": 20000,
+                "orderable": false,
+                "restaurant_id": "id",
+                "number": 0
+            }
+        }
+    ],
+    "required": [
+        "manager",
+        "customer",
+        "restaurant",
+        "food"
+    ],
     "properties": {
-        "email": {
-            "type": "string",
-            "uniqueItems": true 
+        "manager": {
+            "$id": "#/properties/manager",
+            "type": "object",
+            "title": "The manager schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "email": "manager@one.com",
+                    "password": "12345678"
+                }
+            ],
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "$id": "#/properties/manager/properties/email",
+                    "type": "string",
+                    "title": "The email schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "manager@one.com"
+                    ]
+                },
+                "password": {
+                    "$id": "#/properties/manager/properties/password",
+                    "type": "string",
+                    "title": "The password schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "12345678"
+                    ]
+                }
+            },
+            "additionalProperties": true
         },
-        "password": {
-            "type": "string",
-            "minimum": 8
+        "customer": {
+            "$id": "#/properties/customer",
+            "type": "object",
+            "title": "The customer schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "phone": "09121234567",
+                    "password": "12345678",
+                    "first_name": "Hanieh",
+                    "last_name": "Mahdavi",
+                    "area": "HaniehArea",
+                    "address": "HaniehAddress",
+                    "credit": 0,
+                    "orders_history": [],
+                    "favorits": []
+                }
+            ],
+            "required": [
+                "phone",
+                "password",
+                "first_name",
+                "last_name",
+                "area",
+                "address",
+                "credit",
+                "orders_history",
+                "favorits"
+            ],
+            "properties": {
+                "phone": {
+                    "$id": "#/properties/customer/properties/phone",
+                    "type": "string",
+                    "title": "The phone schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "09121234567"
+                    ]
+                },
+                "password": {
+                    "$id": "#/properties/customer/properties/password",
+                    "type": "string",
+                    "title": "The password schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "12345678"
+                    ]
+                },
+                "first_name": {
+                    "$id": "#/properties/customer/properties/first_name",
+                    "type": "string",
+                    "title": "The first_name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Hanieh"
+                    ]
+                },
+                "last_name": {
+                    "$id": "#/properties/customer/properties/last_name",
+                    "type": "string",
+                    "title": "The last_name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Mahdavi"
+                    ]
+                },
+                "area": {
+                    "$id": "#/properties/customer/properties/area",
+                    "type": "string",
+                    "title": "The area schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "HaniehArea"
+                    ]
+                },
+                "address": {
+                    "$id": "#/properties/customer/properties/address",
+                    "type": "string",
+                    "title": "The address schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "HaniehAddress"
+                    ]
+                },
+                "credit": {
+                    "$id": "#/properties/customer/properties/credit",
+                    "type": "integer",
+                    "title": "The credit schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        0
+                    ]
+                },
+                "orders_history": {
+                    "$id": "#/properties/customer/properties/orders_history",
+                    "type": "array",
+                    "title": "The orders_history schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        []
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/customer/properties/orders_history/items"
+                    }
+                },
+                "favorits": {
+                    "$id": "#/properties/customer/properties/favorits",
+                    "type": "array",
+                    "title": "The favorits schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        []
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/customer/properties/favorits/items"
+                    }
+                }
+            },
+            "additionalProperties": true
+        },
+        "restaurant": {
+            "$id": "#/properties/restaurant",
+            "type": "object",
+            "title": "The restaurant schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "name": "Hani",
+                    "area": "HaniArea",
+                    "address": "HaniAddress",
+                    "service_areas": "HaniehArea, HaniArea",
+                    "work_hour": "9-9",
+                    "deliver_cost": 0,
+                    "foods": []
+                }
+            ],
+            "required": [
+                "name",
+                "area",
+                "address",
+                "service_areas",
+                "work_hour",
+                "deliver_cost",
+                "foods"
+            ],
+            "properties": {
+                "name": {
+                    "$id": "#/properties/restaurant/properties/name",
+                    "type": "string",
+                    "title": "The name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Hani"
+                    ]
+                },
+                "area": {
+                    "$id": "#/properties/restaurant/properties/area",
+                    "type": "string",
+                    "title": "The area schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "HaniArea"
+                    ]
+                },
+                "address": {
+                    "$id": "#/properties/restaurant/properties/address",
+                    "type": "string",
+                    "title": "The address schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "HaniAddress"
+                    ]
+                },
+                "service_areas": {
+                    "$id": "#/properties/restaurant/properties/service_areas",
+                    "type": "string",
+                    "title": "The service_areas schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "HaniehArea, HaniArea"
+                    ]
+                },
+                "work_hour": {
+                    "$id": "#/properties/restaurant/properties/work_hour",
+                    "type": "string",
+                    "title": "The work_hour schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "9-9"
+                    ]
+                },
+                "deliver_cost": {
+                    "$id": "#/properties/restaurant/properties/deliver_cost",
+                    "type": "integer",
+                    "title": "The deliver_cost schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        0
+                    ]
+                },
+                "foods": {
+                    "$id": "#/properties/restaurant/properties/foods",
+                    "type": "array",
+                    "title": "The foods schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        []
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/restaurant/properties/foods/items"
+                    }
+                }
+            },
+            "additionalProperties": true
+        },
+        "food": {
+            "$id": "#/properties/food",
+            "type": "object",
+            "title": "The food schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "name": "Adasi",
+                    "cost": 20000,
+                    "orderable": false,
+                    "restaurant_id": "id",
+                    "number": 0
+                }
+            ],
+            "required": [
+                "name",
+                "cost",
+                "orderable",
+                "restaurant_id",
+                "number"
+            ],
+            "properties": {
+                "name": {
+                    "$id": "#/properties/food/properties/name",
+                    "type": "string",
+                    "title": "The name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Adasi"
+                    ]
+                },
+                "cost": {
+                    "$id": "#/properties/food/properties/cost",
+                    "type": "integer",
+                    "title": "The cost schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        20000
+                    ]
+                },
+                "orderable": {
+                    "$id": "#/properties/food/properties/orderable",
+                    "type": "boolean",
+                    "title": "The orderable schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "restaurant_id": {
+                    "$id": "#/properties/food/properties/restaurant_id",
+                    "type": "string",
+                    "title": "The restaurant_id schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "id"
+                    ]
+                },
+                "number": {
+                    "$id": "#/properties/food/properties/number",
+                    "type": "integer",
+                    "title": "The number schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        0
+                    ]
+                }
+            },
+            "additionalProperties": true
         }
     },
-    "required": ["email", "password"]
-},
-{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Customer",
-    "type": "object",
-    "properties": {
-        "phone": {
-            "type": "number",
-            "uniqueItems": true 
-        },
-        "password": {
-            "type": "string",
-            "minimum": 8
-        }
-    },
-    "required": ["phone", "password"]
-},
-{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Customer",
-    "type": "object",
-    "properties": {
-        "phone": {
-            "type": "number",
-            "uniqueItems": true 
-        },
-        "password": {
-            "type": "string",
-            "minimum": 8
-        }
-    },
-    "required": ["phone", "password"]
+    "additionalProperties": true
 }
