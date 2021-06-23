@@ -24,26 +24,28 @@ class EditFoodItemApi(Resource):
                     name = found_food['name'] if body['name'] == "" else body['name']
                     cost = found_food['cost'] if body['cost'] == "" else body['cost']
                     orderable = found_food['orderable'] if body['orderable'] == "" else body['orderable']
+                    number = found_food['number'] if body['number'] == "" else body['number']
 
                     food_id = foods.update({'_id': ObjectId(id)},
                                  {"$set": 
                                  {'name': name,
                                   'cost': cost,
-                                  'orderable': orderable }})
+                                  'orderable': orderable,
+                                  'number': number}})
 
                     updated_food = []
                     for f in found_restaurant['foods']:
                         if f['food_id'] == id:
-                            updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'food_id': id})
+                            updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'food_id': id, 'number': number})
                         else:
-                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id']})
+                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id'],'number': f['number']})
                     restaurants.update({'_id': ObjectId(ObjectId(found_food['restaurant_id']))},
                                  {"$set":{'foods': updated_food}})
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':name, 'cost':cost, 'orderable':orderable})
+            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':name, 'cost':cost, 'orderable':orderable, 'number': number})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError

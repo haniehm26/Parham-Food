@@ -23,14 +23,15 @@ class AddFoodItemApi(Resource):
                     name = body['name']
                     cost = body['cost']
                     orderable = False
+                    number = 0
                     
-                    food_id = foods.insert({'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id})
+                    food_id = foods.insert({'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id, 'number': number})
                     new_food = foods.find_one({'_id': food_id})
 
                     updated_food = []
                     for f in found_restaurant['foods']:
-                        updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id']})
-                    updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'food_id': str(food_id)})
+                        updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id'], 'number': f['number']})
+                    updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'food_id': str(food_id), 'number': number})
 
                     restaurants.update({'_id': ObjectId(id)},
                                  {"$set":{'foods': updated_food}})
@@ -38,7 +39,7 @@ class AddFoodItemApi(Resource):
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': str(food_id),'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id})
+            return jsonify({'id': str(food_id),'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id, 'number': number})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError

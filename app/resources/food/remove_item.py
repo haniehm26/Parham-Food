@@ -25,16 +25,17 @@ class RemoveFoodItemApi(Resource):
                     updated_food = []
                     for f in found_restaurant['foods']:
                         if f['food_id'] == id:
-                            found_restaurant['foods'].remove({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': id})
+                            found_restaurant['foods'].remove({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': id, 'number': f['number']})
                         else:
-                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id']})
+                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id'], 'number': f['number']})
                     restaurants.update({'_id': ObjectId(ObjectId(found_food['restaurant_id']))},
                                  {"$set":{'foods': updated_food}})
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':found_food['name'], 'cost':found_food['cost'], 'orderable':found_food['orderable']})
+            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':found_food['name'], 'cost':found_food['cost'],
+                            'orderable':found_food['orderable'], 'number': found_food['number']})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
