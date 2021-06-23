@@ -35,10 +35,10 @@ class EditFoodItemApi(Resource):
 
                     updated_food = []
                     for f in found_restaurant['foods']:
-                        if f['food_id'] == id:
-                            updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'food_id': id, 'number': number})
+                        if f['id'] == id:
+                            updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'id': id, 'number': number, 'restaurant_id': found_food['restaurant_id']})
                         else:
-                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['food_id'],'number': f['number']})
+                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'id': f['id'],'number': f['number'], 'restaurant_id': f['restaurant_id']})
                     restaurants.update({'_id': ObjectId(ObjectId(found_food['restaurant_id']))},
                                  {"$set":{'foods': updated_food}})
                 else:

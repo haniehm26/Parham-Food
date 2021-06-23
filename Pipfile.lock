@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cecb911d2efe62dfc7321905504fec7f7ceb2c137828c97d6d76ecfcf4780de6"
+            "sha256": "817c5a4c96dffb7ac0a1759fe7fce8b1796d35b54be4f8f68ac79c1bd0f8b6b8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -183,6 +183,13 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==0.15.1"
+        },
+        "genson": {
+            "hashes": [
+                "sha256:8caf69aa10af7aee0e1a1351d1d06801f4696e005f06cedef438635384346a16"
+            ],
+            "index": "pypi",
+            "version": "==1.2.2"
         },
         "idna": {
             "hashes": [

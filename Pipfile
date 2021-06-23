@@ -11,6 +11,7 @@ flask-pymongo = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
 flask-cors = "*"
+genson = "*"
 
 [dev-packages]
 
