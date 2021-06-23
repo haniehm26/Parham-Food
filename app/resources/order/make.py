@@ -14,7 +14,7 @@ class MakeOrderApi(Resource):
             orders = mongo.db.orders
             customers = mongo.db.customers
             restaurants = mongo.db.restaurants
-            
+
             body = request.get_json()
             foods = body['foods']
             time = datetime.datetime.now()
@@ -23,9 +23,32 @@ class MakeOrderApi(Resource):
             restaurant = found_restaurant
             customer = found_customer
             status = ""
+
+            final_cost = 0
+            for food in foods:
+                final_cost = final_cost + food['cost']
+
+            customer_credit = found_customer['credit'] - final_cost
+
             order_id = orders.insert({'foods': foods, 'time': time , 'restaurant' : restaurant,
                                     'customer': customer, 'status': status})
             new_order = orders.find_one({'_id': order_id})
+
+            order_history = []
+            order_history.append(new_order)
+
+            customers.update({'_id': ObjectId(id)},
+                {"$set":
+                    {'first_name': found_customer['first_name'],
+                    'last_name': found_customer['last_name'], 
+                    'area': found_customer['area'], 
+                    'address' : found_customer['address'],
+                    'credit' : customer_credit,
+                    'orders_history' : order_history,
+                    'favorits' : found_customer['favorits']
+                    }
+                })
+
             return jsonify({'id': str(order_id),'foods': foods, 'time': time , 'restaurant' : restaurant, 'customer': customer, 'status': status})
 
         except CollectionInvalid:
