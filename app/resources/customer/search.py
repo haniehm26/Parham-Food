@@ -6,26 +6,20 @@ from database.db import mongo
 
 class SearchApi(Resource):
     def get(self):
-        restaurant_id = request.args.get('restaurant') # id
+        restaurant_name = request.args.get('restaurant') # name
         area_name = request.args.get('area') # name
         food_name = request.args.get('food') # name
 
         restaurants = mongo.db.restaurants
         all_restaurants = []
-        if isinstance(restaurant_id, ObjectId):
-            found_restaurant = restaurants.find_one({"_id":ObjectId(restaurant_id)})
-            if found_restaurant:
-                all_restaurants.append(found_restaurant)
-            else:
-                for r in restaurants.find():
-                    all_restaurants.append({'name':r['name'],'area': r['area'], 'address' : r['address'], 
-                                'service_areas' : r['service_areas'], 'work_hour' : r['work_hour'],
-                                'deliver_cost' : r['deliver_cost'], 'foods':r['foods'], 'id': str(r['_id'])})
+        found_restaurant = restaurants.find_one({"name" : restaurant_name})
+        if found_restaurant:
+            all_restaurants.append(found_restaurant)
         else:
             for r in restaurants.find():
                 all_restaurants.append({'name':r['name'],'area': r['area'], 'address' : r['address'], 
-                                'service_areas' : r['service_areas'], 'work_hour' : r['work_hour'],
-                                'deliver_cost' : r['deliver_cost'], 'foods':r['foods'], 'id': str(r['_id'])})
+                            'service_areas' : r['service_areas'], 'work_hour' : r['work_hour'],
+                            'deliver_cost' : r['deliver_cost'], 'foods':r['foods'], 'id': str(r['_id'])})
         
         filer_restaurant_area = []
         if area_name == "":
