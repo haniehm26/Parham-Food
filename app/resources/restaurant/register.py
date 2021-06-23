@@ -31,7 +31,8 @@ class RegisterRestaurantApi(Resource):
             else:
                 raise UnauthorizedError
             return jsonify({'name':name,'area': area, 'address' : address, 'id': str(restaurant_id), 
-                            'service_areas' : service_areas, 'work_hour' : work_hour, 'deliver_cost' : deliver_cost })
+                            'service_areas' : service_areas, 'work_hour' : work_hour, 'deliver_cost' : deliver_cost,
+                            'foods': foods })
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
