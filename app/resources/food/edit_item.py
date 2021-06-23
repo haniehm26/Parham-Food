@@ -31,7 +31,8 @@ class EditFoodItemApi(Resource):
                                  {'name': name,
                                   'cost': cost,
                                   'orderable': orderable,
-                                  'number': number}})
+                                  'number': number,
+                                  'restaurant_id': found_food['restaurant_id']}})
 
                     updated_food = []
                     for f in found_restaurant['foods']:
