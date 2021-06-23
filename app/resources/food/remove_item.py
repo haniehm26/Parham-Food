@@ -24,10 +24,10 @@ class RemoveFoodItemApi(Resource):
 
                     updated_food = []
                     for f in found_restaurant['foods']:
-                        if f['food_id'] == id:
+                        if f['id'] == id:
                             found_restaurant['foods'].remove({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'id': id, 'number': f['number'],'restaurant_id': f['restaurant_id']})
                         else:
-                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'food_id': f['id'], 'number': f['number'],'restaurant_id': f['restaurant_id']})
+                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'id': f['id'], 'number': f['number'],'restaurant_id': f['restaurant_id']})
                     restaurants.update({'_id': ObjectId(ObjectId(found_food['restaurant_id']))},
                                  {"$set":{'foods': updated_food}})
                 else:
