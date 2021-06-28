@@ -26,7 +26,7 @@ class SearchApi(Resource):
             filer_restaurant_area = all_restaurants
         else:
             for r in all_restaurants:
-                if r['area'] == area_name:
+                if area_name in r['area']:
                     filer_restaurant_area.append(r)
 
         all_foods = []
@@ -39,7 +39,7 @@ class SearchApi(Resource):
             search_result = all_foods
         else:
             for f in all_foods:
-                if f['name'] == food_name:
+                if food_name in f['name']:
                     search_result.append(f)
         
         return jsonify({"foods" : search_result})

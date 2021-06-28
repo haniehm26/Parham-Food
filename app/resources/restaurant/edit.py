@@ -21,7 +21,7 @@ class EditRestaurantApi(Resource):
                     body = request.get_json()
                     name =  found_restaurant['name'] if body['name'] == "" else body['name']
                     area = found_restaurant['area'] if body['area'] == "" else body['area']
-                    address = found_restaurant['address'] if body['address'] == "" else body['address']
+                    address = found_restaurant['address']
                     service_areas = found_restaurant['service_areas'] if body['service_areas'] == "" else body['service_areas']
                     work_hour = found_restaurant['work_hour'] if body['work_hour'] == "" else body['work_hour']
                     deliver_cost = found_restaurant['deliver_cost'] if body['deliver_cost'] == "" else body['deliver_cost']

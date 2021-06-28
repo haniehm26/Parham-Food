@@ -19,7 +19,7 @@ class RegisterRestaurantApi(Resource):
                 body = request.get_json()
                 name = body['name']
                 area = body['area']
-                address = body['address']
+                address = ''
                 service_areas = body['service_areas']
                 work_hour = body['work_hour']
                 deliver_cost = body['deliver_cost']

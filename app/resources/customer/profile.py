@@ -19,8 +19,8 @@ class EditProfileApi(Resource):
                 first_name = body['first_name']
                 last_name = body['last_name']
                 area = body['area']
-                address = body['address']
-                credit = 1000000
+                address = ''
+                credit = body['credit']
                 orders_history = []
                 favorits = []
                 customer_id = customers.update({'_id': ObjectId(current_customer_id)},

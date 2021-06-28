@@ -23,7 +23,7 @@ class AddFoodItemApi(Resource):
                     name = body['name']
                     cost = body['cost']
                     orderable = False
-                    number = 0
+                    number = body['number']
                     
                     food_id = foods.insert({'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id, 'number': number})
                     new_food = foods.find_one({'_id': food_id})
