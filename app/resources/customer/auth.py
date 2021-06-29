@@ -5,7 +5,7 @@ from pymongo.errors import CollectionInvalid
 import datetime
 from database.db import mongo
 from database.hashing import hash_password, check_password
-from resources.errors import EmailAlreadyExistsError, SchemaValidationError, UserNotExistsError, UnauthorizedError
+from resources.errors import PhoneNumberAlreadyExistsError, EmailAlreadyExistsError, SchemaValidationError, UserNotExistsError, UserWithMobileNotExistsError, UnauthorizedError
 
 class CustomerSignupApi(Resource):
     def post(self):
@@ -14,7 +14,7 @@ class CustomerSignupApi(Resource):
             body = request.get_json()
             customer_found = customers.find_one({'phone': body['phone']})
             if customer_found:
-                raise EmailAlreadyExistsError
+                raise PhoneNumberAlreadyExistsError
             else:
                 password = hash_password(body['password'])
                 first_name = ""
@@ -49,11 +49,11 @@ class CustomerLoginApi(Resource):
             body = request.get_json()
             customer_found = customers.find_one({'phone': body['phone']})
             if not customer_found:
-                raise UserNotExistsError
+                raise UserWithMobileNotExistsError
             else:
                 authorized = check_password(customer_found['password'], body['password'])
                 if not authorized:
-                    raise UnauthorizedError
+                    raise UserWithMobileNotExistsError
                 expires = datetime.timedelta(days=7)
                 access_token = create_access_token(identity=str(customer_found['_id']), expires_delta=expires)
             return {'token': access_token}, 200

@@ -38,6 +38,18 @@ class UserNotExistsError(Exception):
     def to_dict(self):
         return errors['UserNotExistsError']
 
+class UserWithMobileNotExistsError(Exception):
+    status_code = 400
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['UserWithMobileNotExistsError']
+
 class UnauthorizedError(Exception):
     status_code = 401
     def __init__(self, message=None, status_code=None, payload=None):
@@ -102,6 +114,18 @@ class EmailAlreadyExistsError(Exception):
     def to_dict(self):
         return errors['EmailAlreadyExistsError']
 
+class PhoneNumberAlreadyExistsError(Exception):
+    status_code = 400
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['PhoneNumberAlreadyExistsError']
+
 
 errors = {
     "InternalServerError": {
@@ -116,8 +140,12 @@ errors = {
         "message": "کاربر با ایمیل و پسورد وارد شده وجود ندارد",
         "status_code": 400
     },
+    "UserWithMobileNotExistsError": {
+        "message": "کاربر با شماره موبایل و پسورد وارد شده وجود ندارد",
+        "status_code": 400
+    },
     "UnauthorizedError": {
-        "message": "یکی از فیلدها نامعتبر است یا اینکه به این عمل دسترسی ندارید",
+        "message": "به این عملیات دسترسی ندارید",
         "status_code": 401
     },
     "EmailDoesNotExistsError": {
@@ -134,6 +162,10 @@ errors = {
     },
     "EmailAlreadyExistsError": {
         "message": "کاربر با این ایمیل قبلا ثبت نام کرده است",
+        "status_code": 400
+    },
+    "PhoneNumberAlreadyExistsError": {
+        "message": "کاربر با این موبایل قبلا ثبت نام کرده است",
         "status_code": 400
     }
 }

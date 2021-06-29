@@ -32,8 +32,8 @@ class SearchApi(Resource):
         all_foods = []
         for r in filer_restaurant_area:
             for f in r['foods']:
-                all_foods.append(f)
-        
+                if f['orderable'] == True and f['number'] > 0:
+                    all_foods.append(f)
         search_result = []
         if food_name == "":
             search_result = all_foods

@@ -29,13 +29,14 @@ class MakeOrderApi(Resource):
                 final_cost = final_cost + food['cost']
 
             customer_credit = found_customer['credit'] - final_cost
-
             order_id = orders.insert({'foods': foods, 'time': time , 'restaurant' : restaurant,
                                     'customer': customer, 'status': status})
-            new_order = orders.find_one({'_id': order_id})
 
-            order_history = []
-            order_history.append(new_order)
+            new_order = orders.find_one({'_id': order_id})
+           
+            order_history = customer['orders_history']
+            order_history.append({'id': str(order_id), 'foods': foods, 'time': time, 'restaurant' : restaurant,
+                                    'customer': customer, 'status': status})
 
             customers.update({'_id': ObjectId(id)},
                 {"$set":
@@ -48,8 +49,10 @@ class MakeOrderApi(Resource):
                     'favorits' : found_customer['favorits']
                     }
                 })
+            # customer = customers.find_one({"_id": ObjectId(id)})
+            # print(customer['id'])
 
-            return jsonify({'id': str(order_id),'foods': foods, 'time': time , 'restaurant' : restaurant, 'customer': customer, 'status': status})
+            # return jsonify({'id': str(order_id),'foods': foods, 'time': time , 'restaurant' : restaurant, 'customer': customer, 'status': status})
 
         except CollectionInvalid:
             raise SchemaValidationError

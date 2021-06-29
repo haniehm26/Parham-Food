@@ -8,7 +8,7 @@ from database.db import mongo
 from database.hashing import hash_password, check_password
 from resources.errors import EmailAlreadyExistsError, SchemaValidationError, UserNotExistsError, UnauthorizedError
 
-class CustomerOdersApi(Resource):
+class CustomerOrdersApi(Resource):
     def get(self, id):
         try:
             customers = mongo.db.customers
@@ -20,6 +20,18 @@ class CustomerOdersApi(Resource):
                     customer = o['customer']
                     if customer['name'] == found_customer['name']:
                         all_orders.append(o)
+            return jsonify({'orders': all_orders})
+
+        except CollectionInvalid:
+            raise SchemaValidationError
+
+class AllOrdersApi(Resource):
+    def get(self, id):
+        try:
+            orders = mongo.db.orders
+            all_orders=[]
+            for o in orders.find():
+                all_orders.append(o)
             return jsonify({'orders': all_orders})
 
         except CollectionInvalid:

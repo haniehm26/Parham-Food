@@ -5,7 +5,9 @@ from flask_restful import Api
 from flask_cors import CORS
 from flask import request, jsonify
 from resources.errors import errors
-from resources.errors import InternalServerError, SchemaValidationError, UserNotExistsError, UnauthorizedError, EmailDoesNotExistsError, BadTokenError, ExpiredTokenError, EmailAlreadyExistsError
+from resources.errors import InternalServerError, SchemaValidationError, UserNotExistsError, UserWithMobileNotExistsError, UnauthorizedError, EmailDoesNotExistsError, BadTokenError, ExpiredTokenError, EmailAlreadyExistsError, PhoneNumberAlreadyExistsError
+def email_already_exists_error(e):
+    return jsonify(e.to_dict())
 from database.db import initialize_db
 
 app = Flask(__name__)
@@ -53,6 +55,10 @@ def schema_validation_error(e):
 def user_not_exists_error(e):
     return jsonify(e.to_dict())
 
+@app.errorhandler(UserWithMobileNotExistsError)
+def user_with_mobile_not_exists_error(e):
+    return jsonify(e.to_dict())
+
 @app.errorhandler(UnauthorizedError)
 def unauthorized_error(e):
     return jsonify(e.to_dict())
@@ -71,5 +77,9 @@ def expired_token_error(e):
 
 @app.errorhandler(EmailAlreadyExistsError)
 def email_already_exists_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(PhoneNumberAlreadyExistsError)
+def phone_number_already_exists_error(e):
     return jsonify(e.to_dict())
 
