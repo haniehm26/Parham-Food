@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from pymongo.errors import CollectionInvalid, CursorNotFound, ConfigurationError
 
 from database.db import mongo
+from database.models.food import Food
 from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValidationError
 
 class AddFoodItemApi(Resource):
@@ -26,15 +27,14 @@ class AddFoodItemApi(Resource):
                     number = body['number']
                     
                     food_id = foods.insert({'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id, 'number': number})
-                    new_food = foods.find_one({'_id': food_id})
+                    food = Food(record=foods.find_one({'_id': food_id}), id=food_id)
 
                     updated_food = []
                     for f in found_restaurant['foods']:
-                        updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'],
-                                             'id': f['id'], 'number': f['number'], 'restaurant_id': f['restaurant_id']})
+                        food_record = Food(record=f, id=f['id'])
+                        updated_food.append(food_record.to_json())
                                              
-                    updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'id': str(food_id),
-                                         'number': number,'restaurant_id': id})
+                    updated_food.append(food.to_json())
 
                     restaurants.update({'_id': ObjectId(id)},
                                  {"$set":{'foods': updated_food}})
@@ -42,7 +42,7 @@ class AddFoodItemApi(Resource):
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': str(food_id),'name': name, 'cost': cost , 'orderable' : orderable, 'restaurant_id': id, 'number': number})
+            return jsonify({'food' : food.to_json()})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError

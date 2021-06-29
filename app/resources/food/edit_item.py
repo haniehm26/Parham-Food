@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from pymongo.errors import CollectionInvalid, CursorNotFound, ConfigurationError
 
 from database.db import mongo
+from database.models.food import Food
 from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValidationError
 
 class EditFoodItemApi(Resource):
@@ -21,12 +22,12 @@ class EditFoodItemApi(Resource):
                 found_restaurant = restaurants.find_one({"_id":ObjectId(found_food['restaurant_id'])})
                 if found_restaurant :
                     body = request.get_json()
-                    name = found_food['name'] if body['name'] == "" else body['name']
-                    cost = found_food['cost'] if body['cost'] == "" else body['cost']
-                    orderable = found_food['orderable'] if body['orderable'] == "" else body['orderable']
-                    number = found_food['number'] if body['number'] == "" else body['number']
+                    name = found_food['name'] if body['name'] == None else body['name']
+                    cost = found_food['cost'] if body['cost'] == None else body['cost']
+                    orderable = found_food['orderable'] if body['orderable'] == None else body['orderable']
+                    number = found_food['number'] if body['number'] == None else body['number']
 
-                    food_id = foods.update({'_id': ObjectId(id)},
+                    updated_food = foods.find_one_and_update({'_id': ObjectId(id)},
                                  {"$set": 
                                  {'name': name,
                                   'cost': cost,
@@ -34,19 +35,22 @@ class EditFoodItemApi(Resource):
                                   'number': number,
                                   'restaurant_id': found_food['restaurant_id']}})
 
+                    food = Food(record=updated_food, id=id)
+
                     updated_food = []
                     for f in found_restaurant['foods']:
                         if f['id'] == id:
-                            updated_food.append({'name': name, 'cost': cost , 'orderable' : orderable, 'id': id, 'number': number, 'restaurant_id': found_food['restaurant_id']})
+                            updated_food.append(food.to_json())
                         else:
-                            updated_food.append({'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'id': f['id'],'number': f['number'], 'restaurant_id': f['restaurant_id']})
+                            food_record = Food(record=f, id=f['id'])
+                            updated_food.append(food_record.to_json())
                     restaurants.update({'_id': ObjectId(ObjectId(found_food['restaurant_id']))},
                                  {"$set":{'foods': updated_food}})
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'id': id, 'restaurant_id': found_food['restaurant_id'], 'name':name, 'cost':cost, 'orderable':orderable, 'number': number})
+            return jsonify({'food':food.to_json()})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
