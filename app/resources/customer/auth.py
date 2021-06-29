@@ -21,7 +21,7 @@ class CustomerSignupApi(Resource):
                 last_name = ""
                 area = ""
                 address = ""
-                credit = 1000000
+                credit = 1000
                 orders_history = []
                 favorits = []
                 customer_id = customers.insert({

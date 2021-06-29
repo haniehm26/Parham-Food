@@ -63,7 +63,7 @@ class GetProfileApi(Resource):
             else:
                 raise UnauthorizedError
             return jsonify({'first_name': first_name, 'last_name':last_name, 'area': area, 'address' : address,
-                            'credit' : credit, 'orders_history' : orders_history, 'favorits' : favorits, 'id' : str(current_customer_id)})
+                            'credit' : credit, 'orders_history' : [], 'favorits' : favorits, 'id' : str(current_customer_id)})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
