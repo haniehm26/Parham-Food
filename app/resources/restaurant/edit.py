@@ -6,6 +6,7 @@ from pymongo.errors import CollectionInvalid, CursorNotFound, ConfigurationError
 
 from database.db import mongo
 from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValidationError
+from database.models.restaurant import Restaurant
 
 class EditRestaurantApi(Resource):
     @jwt_required()
@@ -19,13 +20,13 @@ class EditRestaurantApi(Resource):
                 found_restaurant = restaurants.find_one({"_id":ObjectId(id)})
                 if found_restaurant :
                     body = request.get_json()
-                    name =  found_restaurant['name'] if body['name'] == "" else body['name']
-                    area = found_restaurant['area'] if body['area'] == "" else body['area']
+                    name =  found_restaurant['name'] if body['name'] == None else body['name']
+                    area = found_restaurant['area'] if body['area'] == None else body['area']
                     address = found_restaurant['address']
-                    service_areas = found_restaurant['service_areas'] if body['service_areas'] == "" else body['service_areas']
-                    work_hour = found_restaurant['work_hour'] if body['work_hour'] == "" else body['work_hour']
-                    deliver_cost = found_restaurant['deliver_cost'] if body['deliver_cost'] == "" else body['deliver_cost']
-                    restaurant_id = restaurants.update({'_id': ObjectId(id)},
+                    service_areas = found_restaurant['service_areas'] if body['service_areas'] == None else body['service_areas']
+                    work_hour = found_restaurant['work_hour'] if body['work_hour'] == None else body['work_hour']
+                    deliver_cost = found_restaurant['deliver_cost'] if body['deliver_cost'] == None else body['deliver_cost']
+                    restaurant_id = restaurants.find_one_and_update({'_id': ObjectId(id)},
                                  {"$set": 
                                  {'name': name,
                                   'area': area,
@@ -33,15 +34,15 @@ class EditRestaurantApi(Resource):
                                   'service_areas': service_areas,
                                   'work_hour': work_hour,
                                   'deliver_cost': deliver_cost }})
-
-                    updated_restaurant = restaurants.find_one({'_id': ObjectId(id)})
+                    
+                    restaurant = Restaurant(name=name, area=area, address=address,
+                        service_areas=service_areas, work_hour=work_hour,
+                        deliver_cost=deliver_cost, foods=found_restaurant['foods'], id=str(id))              
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'name':updated_restaurant['name'],'area':updated_restaurant['area'], 'address' :updated_restaurant['address'], 
-                            'service_areas' :updated_restaurant['service_areas'], 'work_hour' :updated_restaurant['work_hour'],
-                            'deliver_cost' :updated_restaurant['deliver_cost'], 'foods':updated_restaurant['foods'], 'id': id})
+            return jsonify({'restaurant' : restaurant.to_json})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError

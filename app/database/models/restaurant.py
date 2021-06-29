@@ -9,3 +9,9 @@ class Restaurant:
         self.deliver_cost = deliver_cost
         self.foods = foods
         self.id = id
+
+    def to_json(self):
+        return {'name': self.name, 'area': self.area,
+                'address' : self.address, 'service_areas' : self.service_areas,
+                'work_hour' : self.work_hour, 'deliver_cost' : self.deliver_cost,
+                'foods' : self.foods, 'id' : self.id}
