@@ -25,6 +25,10 @@ class MakeOrderApi(Resource):
             sender = None
 
             final_cost = 0
+
+
+
+
             for food in foods:
                 final_cost = final_cost + food['cost']
 
@@ -34,13 +38,20 @@ class MakeOrderApi(Resource):
 
             new_order = orders.find_one({'_id': order_id})
            
+
+        
             res_foods = []
             for f in foods:
-                res_foods.append({'id':f['id'],'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'restaurant_id': f['restaurant_id'], 'number': f['number']})
+                res_foods.append({'id':f['id'],'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'restaurant_id': f['restaurant_id'], 'number': f['number']-1})
             
             res_restaurant = {'name':restaurant['name'],'area':restaurant['area'], 'address' :restaurant['address'], 'id':str(restaurant['_id']), 
                             'service_areas' :restaurant['service_areas'], 'work_hour' :restaurant['work_hour'], 'deliver_cost' :restaurant['deliver_cost'],
-                            'foods':restaurant['foods']}
+                            'foods':res_foods}
+
+            restaurants.update({'_id': ObjectId(foods[0]['restaurant_id'])},
+                {"$set":
+                    {'foods': res_foods}
+                })
 
 
             res_customer = {'first_name': found_customer['first_name'],
