@@ -6,21 +6,23 @@ import datetime
 from database.db import mongo
 from database.hashing import hash_password, check_password
 from resources.errors import EmailAlreadyExistsError, SchemaValidationError, UserNotExistsError, UnauthorizedError
+from database.models.manager import Manager
 
 class ManagerSignupApi(Resource):
     def post(self):
         try:
             managers = mongo.db.managers
             body = request.get_json()
-            manager_found = managers.find_one({'email': body['email']})
+            email = body['email']
+            password = hash_password(body['password'])
+            manager_found = managers.find_one({'email': email})
             if manager_found:
                 raise EmailAlreadyExistsError
             else:
-                password = hash_password(body['password'])
-                manager_id = managers.insert({'email': body['email'], 'password': password})
-                new_manager = managers.find_one({'_id': manager_id})
+                manager_id = managers.insert({'email': email, 'password': password})
+                manager = Manager(email, password, str(manager_id))
                 expires = datetime.timedelta(days=7)
-                access_token = create_access_token(identity=str(manager_id), expires_delta=expires)
+                access_token = create_access_token(identity=manager.id, expires_delta=expires)
             return {'token': access_token}, 200
 
         except CollectionInvalid:
@@ -31,15 +33,18 @@ class ManagerLoginApi(Resource):
         try:
             managers = mongo.db.managers
             body = request.get_json()
-            manager_found = managers.find_one({'email': body['email']})
+            email = body['email']
+            password = body['password']
+            manager_found = managers.find_one({'email': email})
             if not manager_found:
                 raise UserNotExistsError
             else:
-                authorized = check_password(manager_found['password'], body['password'])
+                manager = Manager(manager_found['email'], manager_found['password'], str(manager_found['_id']))
+                authorized = check_password(manager.password, password)
                 if not authorized:
                     raise UnauthorizedError
                 expires = datetime.timedelta(days=7)
-                access_token = create_access_token(identity=str(manager_found['_id']), expires_delta=expires)
+                access_token = create_access_token(identity=str(manager.id), expires_delta=expires)
             return {'token': access_token}, 200
 
         except CollectionInvalid:

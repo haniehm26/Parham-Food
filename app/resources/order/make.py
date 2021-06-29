@@ -8,6 +8,7 @@ from bson.objectid import ObjectId
 from database.hashing import hash_password, check_password
 from resources.errors import EmailAlreadyExistsError, SchemaValidationError, UserNotExistsError, UnauthorizedError
 
+
 class MakeOrderApi(Resource):
     def post(self, id):
         try:
@@ -25,9 +26,6 @@ class MakeOrderApi(Resource):
             sender = None
 
             final_cost = 0
-
-
-
 
             for food in foods:
                 final_cost = final_cost + food['cost']
@@ -92,6 +90,8 @@ class MakeOrderApi(Resource):
                 'id': str(id)}
 
             # print(customer['id'])
+
+         
 
             return jsonify({'id': str(order_id),'foods': res_foods, 'time': time , 'restaurant' : res_restaurant, 'customer': res_customer, 'status': status, 'sender' : sender})
 
