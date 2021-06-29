@@ -28,12 +28,8 @@ class RegisterRestaurantApi(Resource):
                 restaurant_id = restaurants.insert({'name': name, 'area': area, 'address' : address,
                                                     'service_areas' : service_areas, 'work_hour' : work_hour,
                                                     'deliver_cost' : deliver_cost, 'foods' : foods})
-                new_restaurant = restaurants.find_one({'_id': restaurant_id})
 
-                restaurant = Restaurant(name=name, area=area, address=address,
-                                        service_areas=service_areas, work_hour=work_hour,
-                                        deliver_cost=deliver_cost, foods=foods,
-                                        id=str(restaurant_id))
+                restaurant = Restaurant(record=restaurants.find_one({'_id': restaurant_id}))
             else:
                 raise UnauthorizedError
             return jsonify({'restaurant' : restaurant.to_json()})

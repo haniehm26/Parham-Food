@@ -6,6 +6,7 @@ from pymongo.errors import CollectionInvalid, CursorNotFound, ConfigurationError
 
 from database.db import mongo
 from resources.errors import UnauthorizedError, UserNotExistsError ,SchemaValidationError
+from database.models.customer import Customer
 
 class EditProfileApi(Resource):
     @jwt_required()
@@ -23,7 +24,7 @@ class EditProfileApi(Resource):
                 credit = body['credit']
                 orders_history = []
                 favorits = []
-                customer_id = customers.update({'_id': ObjectId(current_customer_id)},
+                customer_id = customers.find_one_and_update({'_id': ObjectId(current_customer_id)},
                 {"$set":
                     {'first_name': first_name, 
                     'last_name':last_name, 
@@ -33,11 +34,10 @@ class EditProfileApi(Resource):
                     'orders_history' : orders_history,
                     'favorits' : favorits}
                 })
-                new_customer = customers.find_one({'_id': current_customer_id})
+                customer = Customer(record=customers.find_one({"_id": ObjectId(current_customer_id)}))
             else:
                 raise UnauthorizedError
-            return jsonify({'first_name': first_name, 'last_name':last_name, 'area': area, 'address' : address,
-                            'credit' : credit, 'orders_history' : orders_history, 'favorits' : favorits, 'id' : str(current_customer_id)})
+            return jsonify({'customer' : customer.to_json()})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
@@ -52,18 +52,11 @@ class GetProfileApi(Resource):
             customers = mongo.db.customers
             found_customer = customers.find_one({"_id": ObjectId(current_customer_id)})
             if found_customer:
-                print(found_customer)
-                first_name = found_customer['first_name']
-                last_name = found_customer['last_name']
-                area = found_customer['area']
-                address = found_customer['address']
-                credit = found_customer['credit']
-                orders_history = found_customer['orders_history']
-                favorits = found_customer['favorits']
+                customer = Customer(record=found_customer)
             else:
                 raise UnauthorizedError
-            return jsonify({'first_name': first_name, 'last_name':last_name, 'area': area, 'address' : address,
-                            'credit' : credit, 'orders_history' : orders_history, 'favorits' : favorits, 'id' : str(current_customer_id)})
+            return jsonify({'customer' : customer.to_json()})
+
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError

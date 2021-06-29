@@ -33,16 +33,15 @@ class EditRestaurantApi(Resource):
                                   'address': address,
                                   'service_areas': service_areas,
                                   'work_hour': work_hour,
-                                  'deliver_cost': deliver_cost }})
+                                  'deliver_cost': deliver_cost,
+                                  'foods': found_restaurant['foods']}})
                     
-                    restaurant = Restaurant(name=name, area=area, address=address,
-                        service_areas=service_areas, work_hour=work_hour,
-                        deliver_cost=deliver_cost, foods=found_restaurant['foods'], id=str(id))              
+                    restaurant = Restaurant(record=restaurants.find_one({'_id': ObjectId(id)}))              
                 else:
                     raise UnauthorizedError
             else:
                 raise UnauthorizedError
-            return jsonify({'restaurant' : restaurant.to_json})
+            return jsonify({'restaurant' : restaurant.to_json()})
 
         except CollectionInvalid or ConfigurationError:
             raise SchemaValidationError
