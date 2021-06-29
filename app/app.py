@@ -3,7 +3,9 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 from flask_cors import CORS
+from flask import request, jsonify
 from resources.errors import errors
+from resources.errors import InternalServerError, SchemaValidationError, UserNotExistsError, UnauthorizedError, EmailDoesNotExistsError, BadTokenError, ExpiredTokenError, EmailAlreadyExistsError
 from database.db import initialize_db
 
 app = Flask(__name__)
@@ -38,3 +40,36 @@ initialize_db(app)
 
 # initialize api routes
 initialize_routes(api)
+
+@app.errorhandler(InternalServerError)
+def internal_server_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(SchemaValidationError)
+def schema_validation_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(UserNotExistsError)
+def user_not_exists_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(UnauthorizedError)
+def unauthorized_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(EmailDoesNotExistsError)
+def email_does_not_exists_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(BadTokenError)
+def bad_token_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(ExpiredTokenError)
+def expired_token_error(e):
+    return jsonify(e.to_dict())
+
+@app.errorhandler(EmailAlreadyExistsError)
+def email_already_exists_error(e):
+    return jsonify(e.to_dict())
+

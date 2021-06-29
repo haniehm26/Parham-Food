@@ -1,66 +1,139 @@
+from flask import jsonify, request
+
 class InternalServerError(Exception):
-    pass
+    status_code = 500
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['InternalServerError']
 
 
 class SchemaValidationError(Exception):
-    pass
+    status_code = 400
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['SchemaValidationError']
 
 
 class UserNotExistsError(Exception):
-    pass
+    status_code = 400
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
 
+    def to_dict(self):
+        return errors['UserNotExistsError']
 
 class UnauthorizedError(Exception):
-    pass
+    status_code = 401
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['UnauthorizedError']
 
 
 class EmailDoesNotExistsError(Exception):
-    pass
+    status_code = 400
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['EmailDoesNotExistsError']
 
 
 class BadTokenError(Exception):
-    pass
+    status_code = 403
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['BadTokenError']
 
 
 class ExpiredTokenError(Exception):
-    pass
+    status_code = 403
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['ExpiredTokenError']
 
 
 class EmailAlreadyExistsError(Exception):
-    pass
+    status_code = 400
+    def __init__(self, message=None, status_code=None, payload=None):
+        super().__init__()
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        return errors['EmailAlreadyExistsError']
 
 
 errors = {
     "InternalServerError": {
-        "message": "Something went wrong",
-        "status": 500
+        "message": "خطایی رخ داده است",
+        "status_code": 500
     },
     "SchemaValidationError": {
-        "message": "Request is missing required fields",
-        "status": 400
+        "message": "همه فیلدهای لازم پر نشده‌اند",
+        "status_code": 400
     },
     "UserNotExistsError": {
-        "message": "User with given email doesn't exists",
-        "status": 400
+        "message": "کاربر با ایمیل و پسورد وارد شده وجود ندارد",
+        "status_code": 400
     },
     "UnauthorizedError": {
-        "message": "Invalid email or password",
-        "status": 401
+        "message": "یکی از فیلدها نامعتبر است یا اینکه به این عمل دسترسی ندارید",
+        "status_code": 401
     },
     "EmailDoesNotExistsError": {
-        "message": "Couldn't find the user with given email address",
-        "status": 400
+        "message": "کاربری با ایمیل وارد شده وجود ندارد",
+        "status_code": 400
     },
     "BadTokenError": {
-        "message": "Invalid token",
-        "status": 403
+        "message": "توکن شما نامعتبر است",
+        "status_code": 403
     },
     "ExpiredTokenError": {
-        "message": "Expired token",
-        "status": 403
+        "message": "توکن شما منقضی شده است",
+        "status_code": 403
     },
-    "EmailAlreadyExists": {
-        "message": "Email already exists",
-        "status": 400
+    "EmailAlreadyExistsError": {
+        "message": "کاربر با این ایمیل قبلا ثبت نام کرده است",
+        "status_code": 400
     }
 }
