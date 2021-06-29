@@ -21,8 +21,8 @@ class MakeOrderApi(Resource):
             found_customer = customers.find_one({"_id": ObjectId(id)})
             found_restaurant = restaurants.find_one({"_id": ObjectId(foods[0]['restaurant_id'])})
             restaurant = found_restaurant
-            customer = found_customer
             status = ""
+            sender = None
 
             final_cost = 0
             for food in foods:
@@ -30,13 +30,32 @@ class MakeOrderApi(Resource):
 
             customer_credit = found_customer['credit'] - final_cost
             order_id = orders.insert({'foods': foods, 'time': time , 'restaurant' : restaurant,
-                                    'customer': customer, 'status': status})
+                                    'customer': found_customer, 'status': status, 'sender': sender})
 
             new_order = orders.find_one({'_id': order_id})
            
-            order_history = customer['orders_history']
+            res_foods = []
+            for f in foods:
+                res_foods.append({'id':f['id'],'name': f['name'], 'cost': f['cost'] , 'orderable' : f['orderable'], 'restaurant_id': f['restaurant_id'], 'number': f['number']})
+            
+            res_restaurant = {'name':restaurant['name'],'area':restaurant['area'], 'address' :restaurant['address'], 'id':str(restaurant['_id']), 
+                            'service_areas' :restaurant['service_areas'], 'work_hour' :restaurant['work_hour'], 'deliver_cost' :restaurant['deliver_cost'],
+                            'foods':restaurant['foods']}
+
+
+            res_customer = {'first_name': found_customer['first_name'],
+                            'last_name': found_customer['last_name'], 
+                            'area': found_customer['area'], 
+                            'address' : found_customer['address'],
+                            'credit' : found_customer['credit'],
+                            'orders_history' : [],
+                            'favorits' : found_customer['favorits'],
+                            'id': str(id)}
+
+            order_history = found_customer['orders_history']
+
             order_history.append({'id': str(order_id), 'foods': foods, 'time': time, 'restaurant' : restaurant,
-                                    'customer': customer, 'status': status})
+                                 'status': status, 'customer': res_customer, 'sender': sender})
 
             customers.update({'_id': ObjectId(id)},
                 {"$set":
@@ -49,10 +68,21 @@ class MakeOrderApi(Resource):
                     'favorits' : found_customer['favorits']
                     }
                 })
-            # customer = customers.find_one({"_id": ObjectId(id)})
+
+            customer = customers.find_one({"_id": ObjectId(id)})
+
+            res_customer = {'first_name': customer['first_name'],
+                'last_name': customer['last_name'], 
+                'area': customer['area'], 
+                'address' : customer['address'],
+                'credit' : customer['credit'],
+                'orders_history' : [],
+                'favorits' : customer['favorits'],
+                'id': str(id)}
+
             # print(customer['id'])
 
-            # return jsonify({'id': str(order_id),'foods': foods, 'time': time , 'restaurant' : restaurant, 'customer': customer, 'status': status})
+            return jsonify({'id': str(order_id),'foods': res_foods, 'time': time , 'restaurant' : res_restaurant, 'customer': res_customer, 'status': status, 'sender' : sender})
 
         except CollectionInvalid:
             raise SchemaValidationError
